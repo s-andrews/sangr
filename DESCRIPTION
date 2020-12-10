@@ -1,13 +1,16 @@
 Package: sangr
-Title: What the Package Does (One Line, Title Case)
+Title: Simulate Sanger Sequencing Chromatograms
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Simon",
+           family = "Andrews",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "simon.andrews@babraham.ac.uk",
+           comment = c(ORCID = "0000-0002-5006-3507"))
+Description: Generates either per base density data for simulated sanger 
+sequences, or produces actual chromatogram line graphs. It can add noise,
+dye blobs, and simulate degradation over time. Allows for either clean or
+mixed sequence traces.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to
     pick a license
 Encoding: UTF-8
