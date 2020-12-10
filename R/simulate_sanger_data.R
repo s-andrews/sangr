@@ -21,6 +21,12 @@ simulate_sanger_data <- function(sequence, sd=5, noise=0.1, degrade=0.8) {
   trace_length <- 20*(nchar(sequence)+2)
   start_signal <- rep(0,trace_length)
 
+  sds <- rep(sd, trace_length)
+
+  if (degrade > 0) {
+    sds <- seq(from=sd, to=sd*(1/degrade), length.out=trace_length)
+  }
+
   tibble::tibble(
     POS=1:trace_length,
     G=start_signal,A=start_signal,T=start_signal,C=start_signal
@@ -29,7 +35,7 @@ simulate_sanger_data <- function(sequence, sd=5, noise=0.1, degrade=0.8) {
   for (i in 1:nchar(sequence)) {
     base <- substr(sequence,i,i)
     position <- 20 * (i+1)
-    add_base(base_data,base,position,sd) -> base_data
+    add_base(base_data,base,position,sds[i]) -> base_data
   }
 
   add_noise(base_data,noise) -> base_data
