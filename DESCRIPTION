@@ -7,13 +7,14 @@ Authors@R:
            role = c("aut", "cre"),
            email = "simon.andrews@babraham.ac.uk",
            comment = c(ORCID = "0000-0002-5006-3507"))
-Description: Generates either per base density data for simulated sanger 
-sequences, or produces actual chromatogram line graphs. It can add noise,
-dye blobs, and simulate degradation over time. Allows for either clean or
-mixed sequence traces.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+Description: Generates either per base density data for simulated sanger sequences, or produces actual chromatogram line graphs. It can add noise, dye blobs, and simulate degradation over time. Allows for either clean or mixed sequence traces.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a license
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Imports: 
+    tibble,
+    dplyr,
+    magrittr,
+    rlang
