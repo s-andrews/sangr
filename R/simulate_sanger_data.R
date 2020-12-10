@@ -11,11 +11,12 @@
 #' @importFrom rlang sym
 #' @importFrom rlang :=
 #' @importFrom stats dnorm
+#' @importFrom stats runif
 #' @importFrom magrittr %>%
 #'
 #' @examples
 #' simulate_sanger_data("GAATTC")
-simulate_sanger_data <- function(sequence, sd=5, noise=0.2, degrade=0.8) {
+simulate_sanger_data <- function(sequence, sd=5, noise=0.1, degrade=0.8) {
 
   trace_length <- 20*(nchar(sequence)+2)
   start_signal <- rep(0,trace_length)
@@ -47,7 +48,18 @@ add_base <- function(data, base, position, sd) {
 }
 
 add_noise <- function(data,noise) {
+
+  data %>% select(-POS) %>% max() -> biggest_signal
+
+  for (i in c("G","A","T","C")) {
+    data %>%
+      dplyr::mutate(
+        "{i}" := !!sym(i) + as.numeric(smooth(runif(nrow(data), min = 0, max=biggest_signal*noise)))
+      ) -> data
+  }
+
   return(data)
+
 }
 
 degrade_signal <- function(data,degrade) {
