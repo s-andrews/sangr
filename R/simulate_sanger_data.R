@@ -71,5 +71,15 @@ add_noise <- function(data,noise) {
 }
 
 degrade_signal <- function(data,degrade) {
+
+  seq(from=1, to=degrade, length.out=nrow(data)) -> degrade_values
+
+  for (i in c("G","A","T","C")) {
+    data %>%
+      dplyr::mutate(
+        "{i}" := !!sym(i) * degrade_values
+      ) -> data
+  }
+
   return(data)
 }
