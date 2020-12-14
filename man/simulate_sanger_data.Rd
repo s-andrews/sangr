@@ -4,7 +4,7 @@
 \alias{simulate_sanger_data}
 \title{Simulate sanger chromatogram density data}
 \usage{
-simulate_sanger_data(sequence, sd = 5, noise = 0.2, degrade = 0.8)
+simulate_sanger_data(sequence, sd = 5, noise = 0.1, degrade = 0.8)
 }
 \arguments{
 \item{sequence}{A string of nucleotides to use (GATC)}
