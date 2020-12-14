@@ -17,4 +17,6 @@ Imports:
     tibble,
     dplyr,
     magrittr,
-    rlang
+    rlang,
+    ggplot2,
+    tidyr

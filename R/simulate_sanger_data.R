@@ -10,8 +10,7 @@
 #'
 #' @importFrom rlang sym
 #' @importFrom rlang :=
-#' @importFrom stats dnorm
-#' @importFrom stats runif
+#' @importFrom stats dnorm density smooth runif
 #' @importFrom magrittr %>%
 #'
 #' @examples
@@ -55,7 +54,10 @@ add_base <- function(data, base, position, sd) {
 
 add_noise <- function(data,noise) {
 
-  data %>% select(-POS) %>% max() -> biggest_signal
+  # Fix for spurious check() warning
+  NULL -> POS
+
+  data %>% dplyr::select(-POS) %>% max() -> biggest_signal
 
   for (i in c("G","A","T","C")) {
     data %>%
