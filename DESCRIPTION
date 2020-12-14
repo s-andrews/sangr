@@ -20,3 +20,5 @@ Imports:
     rlang,
     ggplot2,
     tidyr
+Suggests: 
+    testthat
