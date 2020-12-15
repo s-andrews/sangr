@@ -28,7 +28,7 @@ draw_chromatogram <- function(data, sequence=NULL, palette="ABI") {
         values_to="density"
       ) %>%
       dplyr::arrange(POS,desc(density)) %>%
-      dplyr::filter(POS %in% seq(from=20,by=20,to=max(test$POS)-1)) %>%
+      dplyr::filter(POS %in% seq(from=20,by=20,to=max(data$POS)-1)) %>%
       dplyr::group_by(POS) %>%
       dplyr::slice(1) %>%
       dplyr::ungroup() %>%
