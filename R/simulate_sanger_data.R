@@ -17,7 +17,21 @@
 #' simulate_sanger_data("GAATTC")
 simulate_sanger_data <- function(sequence, sd=5, noise=0.1, degrade=0.8) {
 
-  trace_length <- 20*(nchar(sequence)+2)
+  if (sd<=0) {
+    stop("SD must be more than zero")
+  }
+
+  if (noise<0) {
+    stop("Noise must be greater than or equal to zero")
+  }
+
+
+  if (any(degrade>1, degrade<=0)) {
+    stop("Degrade must be between 0 and 1")
+  }
+
+
+  trace_length <- 20*(nchar(sequence)+1)
   start_signal <- rep(0,trace_length)
 
   sds <- rep(sd, trace_length)
@@ -33,7 +47,7 @@ simulate_sanger_data <- function(sequence, sd=5, noise=0.1, degrade=0.8) {
 
   for (i in 1:nchar(sequence)) {
     base <- substr(sequence,i,i)
-    position <- 20 * (i+1)
+    position <- 20 * i
     add_base(base_data,base,position,sds[i]) -> base_data
   }
 

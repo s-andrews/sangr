@@ -34,7 +34,7 @@ draw_chromatogram <- function(data, sequence, palette="ABI") {
     ) %>%
       ggplot2::ggplot(ggplot2::aes(x=POS,y=density, colour=base)) +
       ggplot2::geom_line(size=1.2, show.legend = FALSE) +
-      ggplot2::scale_x_continuous(breaks = seq(from=40,by=20,length.out=length(labels)), labels = labels) +
+      ggplot2::scale_x_continuous(breaks = seq(from=20,by=20,length.out=length(labels)), labels = labels) +
       ggplot2::scale_colour_manual(values = palette_colours) +
       ggplot2::theme(axis.title = ggplot2::element_blank(),
             axis.text.y = ggplot2::element_blank(),
