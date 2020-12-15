@@ -9,7 +9,7 @@
 #'
 #'@importFrom ggplot2 ggplot geom_line scale_x_continuous theme scale_colour_manual element_blank
 #'@importFrom tidyr pivot_longer
-#'@importFrom dplyr filter group_by ungroup slice arrange pull
+#'@importFrom dplyr filter group_by ungroup slice arrange pull desc
 #'
 #'
 #' @examples
@@ -27,7 +27,7 @@ draw_chromatogram <- function(data, sequence=NULL, palette="ABI") {
         names_to="base",
         values_to="density"
       ) %>%
-      dplyr::arrange(POS,desc(density)) %>%
+      dplyr::arrange(POS,dplyr::desc(density)) %>%
       dplyr::filter(POS %in% seq(from=20,by=20,to=max(data$POS)-1)) %>%
       dplyr::group_by(POS) %>%
       dplyr::slice(1) %>%
