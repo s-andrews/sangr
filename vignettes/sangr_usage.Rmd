@@ -1,0 +1,174 @@
+---
+title: "sangr_usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{sangr_usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sangr)
+theme_set(theme_classic(base_size=16))
+```
+
+The ```sangr``` package is used to simulate Sanger sequencing chromatograms.  The simulated chromatograms are designed to be used for illustrative purposes - they are not an exact mathematical model of real sanger data but are intended to be visually similar.
+
+The package has two types of functions:
+
+1. Functions which generate probability density values for the different base traces 
+2. A function ```draw_chromatogram``` which takes the probabilities and plots them
+
+
+Generating probabilities
+========================
+
+The main function for generating base probability data is the ```simulate_sanger_data``` function.  This takes in a string containing a sequence to simulate and generates a set of probabilities which can then be passed to ```draw_chromatogram``` to get a visual version of a trace.
+
+The basic usage of the function just requires a sequence:
+
+```{r fig.height=2, fig.width=8}
+simulate_sanger_data("GGATCCTAG") %>%
+  draw_chromatogram()
+```
+
+Peak Resolution
+---------------
+
+You can vary the resolution of the peaks by changing the ```sd``` parameter.  Each base occupies 20 positions and the default ```sd``` is 5
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAG", sd=2) %>%
+  draw_chromatogram() +
+  ggtitle("High resolution peaks (SD=2)")
+```
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAG", sd=12) %>%
+  draw_chromatogram() +
+  ggtitle("Low resolution peaks (SD=12)")
+```
+
+
+Noise
+-----
+
+You can add varying amounts of random noise to the traces using the ```noise``` parameter.  Sensible values for noise go from 0 (completley clean), to 1 (very high noise) and above.
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAG", noise=0) %>%
+  draw_chromatogram() +
+  ggtitle("No noise")
+```
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAG", noise=0.2) %>%
+  draw_chromatogram() +
+  ggtitle("Moderate noise (0.2)")
+```
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAG", noise=0.9) %>%
+  draw_chromatogram() +
+  ggtitle("High noise (0.9)")
+```
+
+Signal Degradation
+------------------
+
+Another factor you can change is how much the signal degrades over the course of the sequence. Real chromatograms will show a loss of signal as they proceed and you can simulate that using the ```degrade``` option.  You specify the proportion of signal which remains by the end of the trace, so ```degrade=0.6``` means that the last base will retain only 60% of the signal in the first base.
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAGGATGGCGATAGATGCTAGT", noise=0, degrade=1) %>%
+  draw_chromatogram() +
+  ggtitle("No degradation")
+```
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAGGATGGCGATAGATGCTAGT", noise=0, degrade=0.8) %>%
+  draw_chromatogram("GGATCCTAGGATGGCGATAGATGCTAGT") +
+  ggtitle("Mild degradation (0.8)")
+```
+
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAGGATGGCGATAGATGCTAGT", noise=0, degrade=0.2) %>%
+  draw_chromatogram("GGATCCTAGGATGGCGATAGATGCTAGT") +
+  ggtitle("Strong degradation (0.2)")
+```
+
+Combining Probabilities
+=======================
+
+If you have run the ```simulate_sanger_data``` function multiple times you might want to demonstrate the effect of having a mixed signal in your traces.  You can therefore use the ```merge_sanger_data``` function to merge multiple sets of probability together so that they can be plotted.
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCC", noise=0, degrade=1) -> sanger1
+simulate_sanger_data("GCATCC", noise=0, degrade=1, sd=7) -> sanger2
+simulate_sanger_data("GGATAC", noise=0, degrade=1, sd=7) -> sanger3
+
+merge_sanger_data(sanger1, sanger2, sanger3) %>%
+  draw_chromatogram() +
+  ggtitle("Merged Chromatograms")
+```
+
+Drawing Chromatograms
+=====================
+
+The ```draw_chromatogram``` function turns a set of probabilities into a drawn chromatogram.  The returned value is a ```ggplot2``` object containing a line graph of the chromatogram.  By default the function will call bases based on the strongest signal at each position in the trace.
+
+
+```{r fig.height=3, fig.width=8}
+simulate_sanger_data("GGATCCTAG", noise=0, degrade=1) -> sangr_data
+
+draw_chromatogram(sangr_data)
+```
+
+Customising colours
+-------------------
+
+Different systems use different colours to represent the different DNA bases.  We provide some standard colour schemes and also allow you to specify your own if you prefer.
+
+The default scheme is the one used by ABI in their viewers.
+
+```{r fig.height=3, fig.width=8}
+draw_chromatogram(sangr_data, palette = "ABI")
+```
+
+We also include the colours used by Geneious Prime.
+
+```{r fig.height=3, fig.width=8}
+draw_chromatogram(sangr_data, palette = "Geneious")
+```
+
+If you prefer you can include your own custom colours by passing a 4 element colour vector to the ```palette``` argument in the order A, C, G, T.
+
+```{r fig.height=3, fig.width=8}
+draw_chromatogram(sangr_data, palette = c("brown","purple","cyan","orange"))
+```
+
+Customising plots
+-----------------
+
+The value returned by ```draw_chromatogram``` is a standard ```ggplot2``` object so you can add further customisation to it as you see fit.  For example all of the plots shown above use the ```theme_classic()``` theme rather than the default ggplot theme.
+
+```{r fig.height=3, fig.width=8}
+draw_chromatogram(sangr_data) +
+  theme_dark()+
+  ggtitle("Customised plot") +
+  xlab(NULL)
+```
+
+
+
+
+
+
+
