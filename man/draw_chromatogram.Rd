@@ -4,12 +4,14 @@
 \alias{draw_chromatogram}
 \title{Draw a chromatogram from simulated data}
 \usage{
-draw_chromatogram(data, sequence)
+draw_chromatogram(data, sequence, palette = "ABI")
 }
 \arguments{
 \item{data}{The per base density data from simulate_sanger_data}
 
 \item{sequence}{A string containing the expected sequence}
+
+\item{palette}{The colours used for the ACGT traces. Can be "ABI" or "Geneious"}
 }
 \value{
 A ggplot object containing the chromatogram

@@ -1,7 +1,7 @@
 #' Draw a chromatogram from simulated data
 #'
 #' @param data The per base density data from simulate_sanger_data
-#' @param sequence A string containing the expected sequence
+#' @param sequence A string containing the expected sequence. Called from the density data if not provided
 #' @param palette The colours used for the ACGT traces. Can be "ABI" or "Geneious"
 #'
 #' @return A ggplot object containing the chromatogram
@@ -9,14 +9,32 @@
 #'
 #'@importFrom ggplot2 ggplot geom_line scale_x_continuous theme scale_colour_manual element_blank
 #'@importFrom tidyr pivot_longer
+#'@importFrom dplyr filter group_by ungroup slice arrange pull
 #'
 #'
 #' @examples
 #' draw_chromatogram(simulate_sanger_data("GAATTC"), "GAATTC")
-draw_chromatogram <- function(data, sequence, palette="ABI") {
+draw_chromatogram <- function(data, sequence=NULL, palette="ABI") {
 
   # This avoids the spurious warnings from check()
   NULL -> POS -> base
+
+  # If the sequence is null then we need to call it from the data
+  if (is.null(sequence)) {
+    data %>%
+      tidyr::pivot_longer(
+        cols=-POS,
+        names_to="base",
+        values_to="density"
+      ) %>%
+      dplyr::arrange(POS,desc(density)) %>%
+      dplyr::filter(POS %in% seq(from=20,by=20,to=max(test$POS)-1)) %>%
+      dplyr::group_by(POS) %>%
+      dplyr::slice(1) %>%
+      dplyr::ungroup() %>%
+      dplyr::pull(base) %>%
+      paste0(collapse = "") -> sequence
+  }
 
   strsplit(sequence,"")[[1]] -> labels
 
