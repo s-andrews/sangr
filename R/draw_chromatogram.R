@@ -2,7 +2,7 @@
 #'
 #' @param data The per base density data from simulate_sanger_data
 #' @param sequence A string containing the expected sequence. Called from the density data if not provided
-#' @param palette The colours used for the ACGT traces. Can be "ABI" or "Geneious"
+#' @param palette The colours used for the ACGT traces. Can be "ABI" or "Geneious" or a 4 element colour vector (A,C,G,T)
 #'
 #' @return A ggplot object containing the chromatogram
 #' @export
@@ -40,8 +40,13 @@ draw_chromatogram <- function(data, sequence=NULL, palette="ABI") {
 
   palette_colours <- c("green2","blue2","black","red2")
 
-  if(palette == "Geneious") {
-    palette_colours <- c("red2","blue2","darkgoldenrod2","green2")
+  if (length(palette) == 4) {
+    palette_colours <- palette
+  }
+  else {
+    if(palette == "Geneious") {
+      palette_colours <- c("red2","blue2","darkgoldenrod2","green2")
+    }
   }
 
   data %>%
