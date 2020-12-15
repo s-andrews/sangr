@@ -41,7 +41,7 @@ draw_chromatogram <- function(data, sequence=NULL, palette="ABI") {
   palette_colours <- c("green2","blue2","black","red2")
 
   if(palette == "Geneious") {
-    palette_colours <- c("red2","blue2","green2","darkgoldenrod2")
+    palette_colours <- c("red2","blue2","darkgoldenrod2","green2")
   }
 
   data %>%
