@@ -39,5 +39,5 @@ vignettes/*.pdf
 .Renviron
 .Rproj.user
 inst/doc
-doc
+doc/*.R*
 Meta
