@@ -1,6 +1,8 @@
 # sangr
 An R package for simulating Sanger sequencing chromatograms
 
+![Sanger Chromatogram](https://raw.githubusercontent.com/s-andrews/sangr/main/Images/chromatogram.png)
+
 This is the development repository for the ```sangr``` R package.  It is designed to simulate sanger sequencing chromatorgrams, both creating per base signal density datasets, and then rendering these as chromatogram images.
 
 ## Installation
